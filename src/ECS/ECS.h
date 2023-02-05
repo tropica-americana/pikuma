@@ -3,7 +3,8 @@
 
 #include <vector>
 #include <bitset>
-
+#include <unordered_map>
+#include <set>
 const unsigned int MAX_COMPONENTS = 32;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,8 +69,44 @@ class System {
         template <typename TComponent> void RequireComponent();
 };
 
+// ----------------------------------pool class --------------------------------------
+class IPool {
+    public:
+     virtual ~IPool() {} 
+};
+template <typename T >
+class Pool : public IPool {
+    private: 
+    std::vector <T> data ; 
+
+    public: 
+    virtual Pool() = default ; 
+    virtual ~Pool() = default ; 
+    Pool (int size = 100 ) { Resize(size);} 
+    int GetSize () const {return data.size() ; }
+    bool isEmpty () const {return data.empty () ; }
+    void Resize (int n )  {data.resize(n) ; }
+    void Add (T object ) {data.push_back(object);}
+    void Set (int index , T object ) {data[index] = object ;  }
+    T & Get (int index ) {return static_cast<T&>(data[index]);}
+    T & operator [] (unsigned int index ) {return data[index];}
+
+
+};
+// --------------registry class ----------------------------------------------------------
 class Registry {
-    // TODO:...
+    int numEntitis ;
+    std::vector <IPool * > ComponentPools ;  
+    std::vector <Signature> entityComponentSignature ; 
+    std::unordered_map< std::type_index , System * > systems ; 
+    std::set<Entity> entitiesToBeEmbedded ; 
+    std::set<Entity> entitiesToBeKilled ; 
+    Registry () = default ; 
+    Entity CreateEntity () ; 
+    Void KillEntity (Entity entity ) ; 
+    void AddSystem () ; 
+    void AddComponent();
+    
 };
 
 template <typename TComponent>
@@ -77,5 +114,4 @@ void System::RequireComponent() {
     const auto componentId = Component<TComponent>::GetId();
     componentSignature.set(componentId);
 }
-
 #endif
