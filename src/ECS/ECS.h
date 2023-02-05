@@ -95,7 +95,7 @@ class Pool : public IPool {
 };
 // --------------registry class ----------------------------------------------------------
 class Registry {
-    int numEntitis ;
+    int numEntities ;
     std::vector <IPool * > ComponentPools ;  
     std::vector <Signature> entityComponentSignature ; 
     std::unordered_map< std::type_index , System * > systems ; 
@@ -103,7 +103,8 @@ class Registry {
     std::set<Entity> entitiesToBeKilled ; 
     Registry () = default ; 
     Entity CreateEntity () ; 
-    Void KillEntity (Entity entity ) ; 
+    void addEntityToTheSystem(Entity entity ) ; 
+    void KillEntity (Entity entity ) ; 
     void AddSystem () ; 
     void AddComponent();
     

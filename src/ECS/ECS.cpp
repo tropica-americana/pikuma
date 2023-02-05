@@ -1,5 +1,5 @@
 #include "ECS.h"
-
+#include "../Logger/Logger.h"
 int Entity::GetId() const {
     return id;
 }
@@ -21,3 +21,11 @@ std::vector<Entity> System::GetSystemEntities() const {
 const Signature& System::GetComponentSignature() const {
     return componentSignature;
 }
+Entity Registry:: CreateEntity () {
+    int entityId = numEntities++ ; 
+    Entity entity (entityId ) ; 
+    entitiesToBeEmbedded.insert(entity) ; 
+    Logger::Log ("entity created with id = "+ std::to_string (entityId));
+     
+}
+void Registry::addEntityToTheSystem(Entity entity ){} ; 
